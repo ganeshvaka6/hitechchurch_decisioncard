@@ -1,39 +1,38 @@
 
-# generate_qr.py
 import os
 import qrcode
 from pathlib import Path
 
-# Set this in your environment for production; falls back to localhost for local testing
-APP_BASE_URL = os.getenv("APP_BASE_URL", "http://127.0.0.1:5000")
+# 1. Try to use Render's automatic URL
+RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
 
-# If your form is at '/', keep endpoint="/"
-# If you later move it to '/form', just change endpoint to "/form"
+# 2. Otherwise use APP_BASE_URL (env override)
+APP_BASE_URL = os.getenv("APP_BASE_URL")
+
+# 3. Local fallback
+DEFAULT_LOCAL = "http://127.0.0.1:5000"
+
+# Decide final base URL (same logic as your backend)
+BASE_URL = (RENDER_EXTERNAL_URL or APP_BASE_URL or DEFAULT_LOCAL).rstrip("/")
+
+# Your form is at "/"
 endpoint = "/"
+full_url = f"{BASE_URL}{endpoint}"
 
-full_url = f"{APP_BASE_URL.rstrip('/')}{endpoint}"
+print("Using BASE_URL:", BASE_URL)
+print("Generating QR for:", full_url)
 
-print("Using APP_BASE_URL:", APP_BASE_URL)
-print("Generating QR for: ", full_url)
-
-# Ensure /static exists
+# Save into /static so your backend can serve it
 static_dir = Path("static")
-static_dir.mkdir(parents=True, exist_ok=True)
+static_dir.mkdir(exist_ok=True)
 
-# Create QR
-qr = qrcode.QRCode(
-    version=1,      # 1=smallest; increase if your URL is very long
-    box_size=10,    # pixel size of each box
-    border=4        # border boxes (quiet zone)
-)
+output_file = static_dir / "permanent_qr.png"
+
+qr = qrcode.QRCode(version=1, box_size=10, border=5)
 qr.add_data(full_url)
 qr.make(fit=True)
 
 img = qr.make_image(fill_color="black", back_color="white")
+img.save(output_file)
 
-# Save permanent asset
-out_path = static_dir / "permanent_qr.png"
-img.save(out_path)
-
-print(f"✅ Saved permanent QR to: {out_path.resolve()}")
-print("Tip: You can serve it at /static/permanent_qr.png")
+print(f"✅ QR Code saved to: {output_file.resolve()}")
