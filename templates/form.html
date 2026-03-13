@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Visitor & Decision Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="bg-gray-100">
+  <div class="max-w-4xl mx-auto my-8 p-6 card">
+    <div class="flex justify-center mb-6">
+      <img src="/static/logo.png" alt="Hitech City Christian Center" class="logo" />
+    </div>
+
+    <div class="border rounded-lg p-6 mb-8 text-center">
+      <h1 class="text-3xl font-bold">New Visitor & Decision Card</h1>
+      <p class="text-gray-600 mt-2">Help us connect with you and support your walk with Jesus.</p>
+    </div>
+
+    <form id="visitorForm" class="space-y-6">
+      <!-- Name -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="font-semibold">First Name</label>
+          <input id="first_name" required class="w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="font-semibold">Last Name</label>
+          <input id="last_name" class="w-full border rounded p-2" />
+        </div>
+      </div>
+
+      <!-- Phone + Heard -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="font-semibold">Phone Number</label>
+          <input
+            id="phone"
+            inputmode="tel"
+            placeholder="+91..."
+            class="w-full border rounded p-2"
+            aria-describedby="phoneHelp"
+          />
+          <p id="phoneHelp" class="text-sm text-gray-500">Use +91xxxxxxxxxx or enter 10 digits. We’ll format it.</p>
+        </div>
+
+        <div>
+          <label class="font-semibold">How did you hear about our church?</label>
+          <select id="heard_about" class="w-full border rounded p-2">
+            <option value="">Please Select</option>
+            <option>Google Maps</option>
+            <option>I saw the sign</option>
+            <option>Friend / Relatives</option>
+            <option>Social Media</option>
+            <option>YouTube</option>
+            <option>Church Website</option>
+            <option>Invitation from someone</option>
+            <option>Community Event</option>
+            <option>Passing by</option>
+            <option>Online Search</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Connect Options -->
+      <div>
+        <label class="font-semibold">How can our church connect with you?</label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+          <label class="flex items-center gap-2"><input type="checkbox" class="connect" value="Visit/Phone Call"/> I would like a visit or a phone call</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="connect" value="Speak with pastor"/> I would like to speak with a pastor</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="connect" value="Receive updates"/> I want to receive updates about church events</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="connect" value="Ministry team help"/> I would like help connecting with a ministry team</label>
+        </div>
+      </div>
+
+      <!-- Spiritual Decision -->
+      <div>
+        <label class="font-semibold">Your Spiritual Decision Today</label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+          <label class="flex items-center gap-2"><input type="checkbox" class="decision" value="Began a new relationship with Jesus"/> I began a new relationship with Jesus today</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="decision" value="Renewed commitment"/> I renewed my commitment to Jesus</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="decision" value="Support in journey"/> I want support in my spiritual journey</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="decision" value="Questions about following Jesus"/> I have questions about following Jesus</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="decision" value="Other"/> Other</label>
+        </div>
+      </div>
+
+      <!-- Appointment (Date + Time) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="font-semibold">Appointment Date</label>
+          <input
+            type="date"
+            id="appointment_date"
+            class="w-full border rounded p-2"
+            value="{{ current_date }}"
+            aria-describedby="dateHelp"
+          />
+          <p id="dateHelp" class="text-sm text-gray-500">Select any date that works for you.</p>
+        </div>
+
+        <div>
+          <label class="font-semibold">Appointment Time</label>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+            <button type="button" class="slot" data-value="7:00 PM">7:00 PM</button>
+            <button type="button" class="slot" data-value="7:30 PM">7:30 PM</button>
+            <button type="button" class="slot" data-value="8:00 PM">8:00 PM</button>
+            <button type="button" class="slot" data-value="8:30 PM">8:30 PM</button>
+            <button type="button" class="slot" data-value="9:00 PM">9:00 PM</button>
+            <button type="button" class="slot" data-value="9:30 PM">9:30 PM</button>
+          </div>
+          <p class="text-sm text-gray-500 mt-1">Timezone: Asia/Kolkata</p>
+        </div>
+      </div>
+
+      <!-- Locations -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="font-semibold">Current Location</label>
+          <input id="current_location" class="w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="font-semibold">Native Place</label>
+          <input id="native_place" class="w-full border rounded p-2" />
+        </div>
+      </div>
+
+      <!-- Prayer Request -->
+      <div>
+        <label class="font-semibold">Prayer Request</label>
+        <textarea id="prayer_request" class="w-full border rounded p-3 h-32"></textarea>
+      </div>
+
+      <button type="submit" class="btn w-full text-lg">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    let selectedSlot = "";
+    document.querySelectorAll('.slot').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.slot').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedSlot = btn.dataset.value;
+      });
+    });
+
+    document.getElementById('visitorForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const connect = Array.from(document.querySelectorAll('.connect:checked')).map(x => x.value);
+      const decisions = Array.from(document.querySelectorAll('.decision:checked')).map(x => x.value);
+
+      const payload = {
+        first_name: document.getElementById('first_name').value,
+        last_name: document.getElementById('last_name').value,
+        phone: document.getElementById('phone').value,
+        heard_about: document.getElementById('heard_about').value,
+        connect_options: connect,
+        spiritual_decision: decisions,
+        current_location: document.getElementById('current_location').value,
+        native_place: document.getElementById('native_place').value,
+        appointment_date: document.getElementById('appointment_date').value,
+        appointment_time: selectedSlot,
+        prayer_request: document.getElementById('prayer_request').value,
+      };
+
+      const res = await fetch('/submit', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const out = await res.json();
+      alert(out.message || 'Submitted');
+    });
+  </script>
+</body>
+</html>

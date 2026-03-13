@@ -1,0 +1,10 @@
+
+/* Basic refinements if Tailwind fails to load. */
+body{font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";}
+.card{background:#fff;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,.08);}
+.logo{max-height:90px}
+.btn{background:#2563eb;color:#fff;border-radius:8px;padding:.75rem 1rem}
+.btn:hover{background:#1d4ed8}
+input,select,textarea{border:1px solid #d1d5db;border-radius:8px;padding:.5rem .75rem;width:100%}
+.slot{border:1px solid #d1d5db;border-radius:8px;padding:.75rem;text-align:center}
+.slot.active{background:#2563eb;color:#fff;border-color:#2563eb}
