@@ -5,18 +5,52 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Visitor & Decision Card</title>
-  <!-- ✅ Correct Tailwind include -->
+
+  <!-- Tailwind (optional but nice to have) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- ✅ Your stylesheet -->
+
+  <!-- Your site stylesheet (optional) -->
   <link rel="stylesheet" href="/static/style.css" />
+
+  <!-- Alignment fix: minimal, Tailwind-independent CSS -->
   <style>
-    /* Optional tiny guard in case Tailwind fails to load */
+    /* Card + buttons (in case your CSS doesn't include them) */
     .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; }
     .btn { background: #111827; color: #fff; padding: 0.75rem 1rem; border-radius: 0.5rem; }
     .slot { border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; }
     .slot.active { background: #111827; color: #fff; border-color: #111827; }
+
+    /* === Alignment fix starts here === */
+
+    /* Two-column grid for the options groups */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 24px;  /* space between columns */
+      row-gap: 16px;     /* space between rows */
+    }
+
+    /* One micro-grid per line: checkbox (auto) + text (flexible) */
+    .option-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start; /* top-align checkbox with first line of text */
+    }
+
+    /* Slight visual nudge so the box sits nicely next to multi-line text */
+    .option-row input[type="checkbox"] {
+      margin-top: 2px;
+    }
+
+    /* Responsive: stack to one column on small screens */
+    @media (max-width: 768px) {
+      .options-grid { grid-template-columns: 1fr; }
+    }
+    /* === Alignment fix ends here === */
   </style>
 </head>
+
 <body class="bg-gray-100">
   <div class="max-w-4xl mx-auto my-8 p-6 card">
     <div class="flex justify-center mb-6">
@@ -74,58 +108,58 @@
         </div>
       </div>
 
-      <!-- Connect Options (aligned) -->
+      <!-- Connect Options (aligned with micro-grid) -->
       <div>
         <label class="font-semibold">How can our church connect with you?</label>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect mt-1" value="Visit/Phone Call" />
+        <div class="options-grid mt-2">
+          <label class="option-row">
+            <input type="checkbox" class="connect" value="Visit/Phone Call" />
             <span>I would like a visit or a phone call</span>
           </label>
 
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect mt-1" value="Speak with pastor" />
+          <label class="option-row">
+            <input type="checkbox" class="connect" value="Speak with pastor" />
             <span>I would like to speak with a pastor</span>
           </label>
 
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect mt-1" value="Receive updates" />
+          <label class="option-row">
+            <input type="checkbox" class="connect" value="Receive updates" />
             <span>I want to receive updates about church events</span>
           </label>
 
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect mt-1" value="Ministry team help" />
+          <label class="option-row">
+            <input type="checkbox" class="connect" value="Ministry team help" />
             <span>I would like help connecting with a ministry team</span>
           </label>
         </div>
       </div>
 
-      <!-- Spiritual Decision (aligned) -->
+      <!-- Spiritual Decision (aligned with micro-grid) -->
       <div>
         <label class="font-semibold">Your Spiritual Decision Today</label>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision mt-1" value="Began a new relationship with Jesus" />
+        <div class="options-grid mt-2">
+          <label class="option-row">
+            <input type="checkbox" class="decision" value="Began a new relationship with Jesus" />
             <span>I began a new relationship with Jesus today</span>
           </label>
 
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision mt-1" value="Renewed commitment" />
+          <label class="option-row">
+            <input type="checkbox" class="decision" value="Renewed commitment" />
             <span>I renewed my commitment to Jesus</span>
           </label>
 
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision mt-1" value="Support in journey" />
+          <label class="option-row">
+            <input type="checkbox" class="decision" value="Support in journey" />
             <span>I want support in my spiritual journey</span>
           </label>
 
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision mt-1" value="Questions about following Jesus" />
+          <label class="option-row">
+            <input type="checkbox" class="decision" value="Questions about following Jesus" />
             <span>I have questions about following Jesus</span>
           </label>
 
-          <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision mt-1" value="Other" />
+          <label class="option-row">
+            <input type="checkbox" class="decision" value="Other" />
             <span>Other</span>
           </label>
         </div>
@@ -191,7 +225,7 @@
       });
     });
 
-    // Normalize Indian numbers softly
+    // Soft phone normalization for India
     function normalizePhone(raw) {
       const digits = (raw || '').replace(/\D+/g, '');
       if (digits.length === 10) return '+91' + digits;
@@ -206,38 +240,30 @@
       const connect = Array.from(document.querySelectorAll('.connect:checked')).map(x => x.value);
       const decisions = Array.from(document.querySelectorAll('.decision:checked')).map(x => x.value);
 
-      const firstName = document.getElementById('first_name').value || '';
-      const lastName = document.getElementById('last_name').value || '';
-      const phone = normalizePhone(document.getElementById('phone').value || '');
-      const heard = document.getElementById('heard_about').value || '';
-      const curLoc = document.getElementById('current_location').value || '';
-      const nativePlace = document.getElementById('native_place').value || '';
-      const apptDate = document.getElementById('appointment_date').value || '';
-      const apptTime = selectedSlot || '';
-
-      const bookingCombined = [apptDate, apptTime].filter(Boolean).join(' ');
-
-      // Date column: prefer appt date else today (YYYY-MM-DD)
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
-      const dateColumn = apptDate || `${yyyy}-${mm}-${dd}`;
-
-      const submissionTimestamp = new Date().toISOString();
-
       const payload = {
-        "Submission Timestamp": submissionTimestamp,
-        "Date": dateColumn,
-        "Name - First Name": firstName,
-        "Name - Last Name": lastName,
-        "Phone Number": phone,
-        "How did you hear about our church?": heard,
+        "Submission Timestamp": new Date().toISOString(),
+        "Date": (function() {
+          const apptDate = document.getElementById('appointment_date').value || '';
+          if (apptDate) return apptDate;
+          const t = new Date();
+          const y = t.getFullYear();
+          const m = String(t.getMonth() + 1).padStart(2, '0');
+          const d = String(t.getDate()).padStart(2, '0');
+          return `${y}-${m}-${d}`;
+        })(),
+        "Name - First Name": (document.getElementById('first_name').value || ''),
+        "Name - Last Name": (document.getElementById('last_name').value || ''),
+        "Phone Number": normalizePhone(document.getElementById('phone').value || ''),
+        "How did you hear about our church?": (document.getElementById('heard_about').value || ''),
         "How can our church connect with you?": connect,
         "Your Spiritual Decision Today": decisions,
-        "Current Location": curLoc,
-        "Native Place": nativePlace,
-        "Booking a Pastor Appointment for Counseling Needs": bookingCombined,
+        "Current Location": (document.getElementById('current_location').value || ''),
+        "Native Place": (document.getElementById('native_place').value || ''),
+        "Booking a Pastor Appointment for Counseling Needs": (function() {
+          const d = document.getElementById('appointment_date').value || '';
+          const t = selectedSlot || '';
+          return [d, t].filter(Boolean).join(' ');
+        })(),
         "Prayer Request": (document.getElementById('prayer_request').value || '')
       };
 
@@ -252,3 +278,4 @@
   </script>
 </body>
 </html>
+``
