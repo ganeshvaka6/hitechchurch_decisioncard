@@ -36,13 +36,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="font-semibold">Phone Number</label>
-          <input
-            id="phone"
-            inputmode="tel"
-            placeholder="+91..."
-            class="w-full border rounded p-2"
-            aria-describedby="phoneHelp"
-          />
+          <input id="phone" inputmode="tel" placeholder="+91..." class="w-full border rounded p-2" aria-describedby="phoneHelp" />
           <p id="phoneHelp" class="text-sm text-gray-500">Use +91xxxxxxxxxx or enter 10 digits. We’ll format it.</p>
         </div>
 
@@ -70,60 +64,62 @@
         <label class="font-semibold">How can our church connect with you?</label>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect" value="Visit/Phone Call"/>
+            <input type="checkbox" class="connect" value="Visit/Phone Call">
             <span>I would like a visit or a phone call</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect" value="Speak with pastor"/>
+            <input type="checkbox" class="connect" value="Speak with pastor">
             <span>I would like to speak with a pastor</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect" value="Receive updates"/>
+            <input type="checkbox" class="connect" value="Receive updates">
             <span>I want to receive updates about church events</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect" value="Ministry team help"/>
+            <input type="checkbox" class="connect" value="Ministry team help">
             <span>I would like help connecting with a ministry team</span>
           </label>
+
         </div>
       </div>
 
-      <!-- Spiritual Decision (Aligned properly) -->
+      <!-- SPIRITUAL DECISION (Perfect alignment) -->
       <div>
         <label class="font-semibold">Your Spiritual Decision Today</label>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Began a new relationship with Jesus"/>
+            <input type="checkbox" class="decision" value="Began a new relationship with Jesus">
             <span>I began a new relationship with Jesus today</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Renewed commitment"/>
+            <input type="checkbox" class="decision" value="Renewed commitment">
             <span>I renewed my commitment to Jesus</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Support in journey"/>
+            <input type="checkbox" class="decision" value="Support in journey">
             <span>I want support in my spiritual journey</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Questions about following Jesus"/>
+            <input type="checkbox" class="decision" value="Questions about following Jesus">
             <span>I have questions about following Jesus</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Other"/>
+            <input type="checkbox" class="decision" value="Other">
             <span>Other</span>
           </label>
 
         </div>
       </div>
 
+      <!-- LOCATIONS moved ABOVE appointment -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="font-semibold">Current Location</label>
@@ -135,17 +131,11 @@
         </div>
       </div>
 
-      <!-- Appointment (Date + Time) -->
+      <!-- Appointment -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="font-semibold">Appointment Date</label>
-          <input
-            type="date"
-            id="appointment_date"
-            class="w-full border rounded p-2"
-            value="{{ current_date }}"
-            aria-describedby="dateHelp"
-          />
+          <input type="date" id="appointment_date" class="w-full border rounded p-2" value="{{ current_date }}" aria-describedby="dateHelp" />
           <p id="dateHelp" class="text-sm text-gray-500">Select any date that works for you.</p>
         </div>
 
@@ -184,33 +174,33 @@
     });
 
     function normalizePhone(raw) {
-      const digits = (raw || '').replace(/\D+/g, '');
-      if (digits.length === 10) return '+91' + digits;
-      if (digits.length === 12 && digits.startsWith('91')) return '+' + digits;
-      if ((raw || '').startsWith('+') && digits.length >= 10) return raw;
+      const digits = (raw || "").replace(/\D+/g, "");
+      if (digits.length === 10) return "+91" + digits;
+      if (digits.length === 12 && digits.startsWith("91")) return "+" + digits;
+      if (raw.startsWith("+") && digits.length >= 10) return raw;
       return raw;
     }
-    document.getElementById('visitorForm').addEventListener('submit', async (e) => {
+
+    document.getElementById("visitorForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const connect = Array.from(document.querySelectorAll('.connect:checked')).map(x => x.value);
-      const decisions = Array.from(document.querySelectorAll('.decision:checked')).map(x => x.value);
+      const connect = Array.from(document.querySelectorAll(".connect:checked")).map(x => x.value);
+      const decisions = Array.from(document.querySelectorAll(".decision:checked")).map(x => x.value);
 
-      const firstName = document.getElementById('first_name').value || '';
-      const lastName = document.getElementById('last_name').value || '';
-      const phone = normalizePhone(document.getElementById('phone').value || '');
-      const heard = document.getElementById('heard_about').value || '';
-      const curLoc = document.getElementById('current_location').value || '';
-      const nativePlace = document.getElementById('native_place').value || '';
-      const apptDate = document.getElementById('appointment_date').value || '';
-      const apptTime = selectedSlot || '';
-
-      const bookingCombined = [apptDate, apptTime].filter(Boolean).join(' ');
+      const firstName = document.getElementById("first_name").value || "";
+      const lastName = document.getElementById("last_name").value || "";
+      const phone = normalizePhone(document.getElementById("phone").value || "");
+      const heard = document.getElementById("heard_about").value || "";
+      const curLoc = document.getElementById("current_location").value || "";
+      const nativePlace = document.getElementById("native_place").value || "";
+      const apptDate = document.getElementById("appointment_date").value || "";
+      const apptTime = selectedSlot || "";
+      const bookingCombined = [apptDate, apptTime].filter(Boolean).join(" ");
 
       const today = new Date();
       const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
       const fallbackDate = `${yyyy}-${mm}-${dd}`;
       const dateColumn = apptDate || fallbackDate;
 
@@ -228,21 +218,16 @@
         "Current Location": curLoc,
         "Native Place": nativePlace,
         "Booking a Pastor Appointment for Counseling Needs": bookingCombined,
-        "Prayer Request": (document.getElementById('prayer_request').value || '')
+        "Prayer Request": document.getElementById("prayer_request").value || ""
       };
 
-      try {
-        const res = await fetch('/submit', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+      const res = await fetch("/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
       const out = await res.json();
-      alert(out.message || 'Submitted');
-      } catch (err) {
-        console.error(err);
-        alert('Submission failed. Please try again.');
-      }
+      alert(out.message || "Submitted");
     });
   </script>
 </body>
