@@ -88,6 +88,17 @@
         </div>
       </div>
 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="font-semibold">Current Location</label>
+          <input id="current_location" class="w-full border rounded p-2" />
+        </div>
+        <div>
+          <label class="font-semibold">Native Place</label>
+          <input id="native_place" class="w-full border rounded p-2" />
+        </div>
+      </div>
+
       <!-- Appointment (Date + Time) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -116,18 +127,6 @@
         </div>
       </div>
 
-      <!-- Locations -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="font-semibold">Current Location</label>
-          <input id="current_location" class="w-full border rounded p-2" />
-        </div>
-        <div>
-          <label class="font-semibold">Native Place</label>
-          <input id="native_place" class="w-full border rounded p-2" />
-        </div>
-      </div>
-
       <!-- Prayer Request -->
       <div>
         <label class="font-semibold">Prayer Request</label>
@@ -139,7 +138,6 @@
   </div>
 
   <script>
-    // Keep original behavior: slot selection (no UI change)
     let selectedSlot = "";
     document.querySelectorAll('.slot').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -149,7 +147,6 @@
       });
     });
 
-    // Helper: normalize Indian phone numbers softly (doesn't block submission)
     function normalizePhone(raw) {
       const digits = (raw || '').replace(/\D+/g, '');
       if (digits.length === 10) return '+91' + digits;
@@ -160,11 +157,9 @@
     document.getElementById('visitorForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Collect arrays (unchanged UI)
       const connect = Array.from(document.querySelectorAll('.connect:checked')).map(x => x.value);
       const decisions = Array.from(document.querySelectorAll('.decision:checked')).map(x => x.value);
 
-      // Prepare fields
       const firstName = document.getElementById('first_name').value || '';
       const lastName = document.getElementById('last_name').value || '';
       const phone = normalizePhone(document.getElementById('phone').value || '');
@@ -174,10 +169,8 @@
       const apptDate = document.getElementById('appointment_date').value || '';
       const apptTime = selectedSlot || '';
 
-      // Booking field (combined as per your sheet)
       const bookingCombined = [apptDate, apptTime].filter(Boolean).join(' ');
 
-      // Date column: prefer appointment date if provided, else today's date (YYYY-MM-DD)
       const today = new Date();
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -185,10 +178,8 @@
       const fallbackDate = `${yyyy}-${mm}-${dd}`;
       const dateColumn = apptDate || fallbackDate;
 
-      // Submission timestamp (ISO)
       const submissionTimestamp = new Date().toISOString();
 
-      // FINAL PAYLOAD — keys and order match the Excel sheet EXACTLY
       const payload = {
         "Submission Timestamp": submissionTimestamp,
         "Date": dateColumn,
@@ -196,8 +187,8 @@
         "Name - Last Name": lastName,
         "Phone Number": phone,
         "How did you hear about our church?": heard,
-        "How can our church connect with you?": connect, // or connect.join(', ')
-        "Your Spiritual Decision Today": decisions,       // or decisions.join(', ')
+        "How can our church connect with you?": connect,
+        "Your Spiritual Decision Today": decisions,
         "Current Location": curLoc,
         "Native Place": nativePlace,
         "Booking a Pastor Appointment for Counseling Needs": bookingCombined,
