@@ -139,6 +139,7 @@
   </div>
 
   <script>
+    // Keep original behavior: slot selection (no UI change)
     let selectedSlot = "";
     document.querySelectorAll('.slot').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -148,33 +149,73 @@
       });
     });
 
+    // Helper: normalize Indian phone numbers softly (doesn't block submission)
+    function normalizePhone(raw) {
+      const digits = (raw || '').replace(/\D+/g, '');
+      if (digits.length === 10) return '+91' + digits;
+      if (digits.length === 12 && digits.startsWith('91')) return '+' + digits;
+      if ((raw || '').startsWith('+') && digits.length >= 10) return raw;
+      return raw;
+    }
     document.getElementById('visitorForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      // Collect arrays (unchanged UI)
       const connect = Array.from(document.querySelectorAll('.connect:checked')).map(x => x.value);
       const decisions = Array.from(document.querySelectorAll('.decision:checked')).map(x => x.value);
 
+      // Prepare fields
+      const firstName = document.getElementById('first_name').value || '';
+      const lastName = document.getElementById('last_name').value || '';
+      const phone = normalizePhone(document.getElementById('phone').value || '');
+      const heard = document.getElementById('heard_about').value || '';
+      const curLoc = document.getElementById('current_location').value || '';
+      const nativePlace = document.getElementById('native_place').value || '';
+      const apptDate = document.getElementById('appointment_date').value || '';
+      const apptTime = selectedSlot || '';
+
+      // Booking field (combined as per your sheet)
+      const bookingCombined = [apptDate, apptTime].filter(Boolean).join(' ');
+
+      // Date column: prefer appointment date if provided, else today's date (YYYY-MM-DD)
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const fallbackDate = `${yyyy}-${mm}-${dd}`;
+      const dateColumn = apptDate || fallbackDate;
+
+      // Submission timestamp (ISO)
+      const submissionTimestamp = new Date().toISOString();
+
+      // FINAL PAYLOAD — keys and order match the Excel sheet EXACTLY
       const payload = {
-        first_name: document.getElementById('first_name').value,
-        last_name: document.getElementById('last_name').value,
-        phone: document.getElementById('phone').value,
-        heard_about: document.getElementById('heard_about').value,
-        connect_options: connect,
-        spiritual_decision: decisions,
-        current_location: document.getElementById('current_location').value,
-        native_place: document.getElementById('native_place').value,
-        appointment_date: document.getElementById('appointment_date').value,
-        appointment_time: selectedSlot,
-        prayer_request: document.getElementById('prayer_request').value,
+        "Submission Timestamp": submissionTimestamp,
+        "Date": dateColumn,
+        "Name - First Name": firstName,
+        "Name - Last Name": lastName,
+        "Phone Number": phone,
+        "How did you hear about our church?": heard,
+        "How can our church connect with you?": connect, // or connect.join(', ')
+        "Your Spiritual Decision Today": decisions,       // or decisions.join(', ')
+        "Current Location": curLoc,
+        "Native Place": nativePlace,
+        "Booking a Pastor Appointment for Counseling Needs": bookingCombined,
+        "Prayer Request": (document.getElementById('prayer_request').value || '')
       };
 
-      const res = await fetch('/submit', {
+      try {
+        const res = await fetch('/submit', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload)
       });
       const out = await res.json();
       alert(out.message || 'Submitted');
+      } catch (err) {
+        console.error(err);
+        alert('Submission failed. Please try again.');
+      }
     });
   </script>
 </body>
