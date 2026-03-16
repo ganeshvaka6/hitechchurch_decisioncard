@@ -5,17 +5,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Visitor & Decision Card</title>
+  <!-- ✅ Correct Tailwind include -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ✅ Your stylesheet -->
   <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    /* Optional tiny guard in case Tailwind fails to load */
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; }
+    .btn { background: #111827; color: #fff; padding: 0.75rem 1rem; border-radius: 0.5rem; }
+    .slot { border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem; }
+    .slot.active { background: #111827; color: #fff; border-color: #111827; }
+  </style>
 </head>
 <body class="bg-gray-100">
   <div class="max-w-4xl mx-auto my-8 p-6 card">
     <div class="flex justify-center mb-6">
-      <img src="/static/logo.png" alt="Hitech City Christian Center" class="logo" />
+      <img src="/static/logo.png" alt="Hitech City Christian Center" class="h-16" />
     </div>
 
     <div class="border rounded-lg p-6 mb-8 text-center">
-      <h1 class="text-3xl font-bold">New Visitor & Decision Card</h1>
+      <h1 class="text-3xl font-bold">New Visitor &amp; Decision Card</h1>
       <p class="text-gray-600 mt-2">Help us connect with you and support your walk with Jesus.</p>
     </div>
 
@@ -36,7 +45,13 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="font-semibold">Phone Number</label>
-          <input id="phone" inputmode="tel" placeholder="+91..." class="w-full border rounded p-2" aria-describedby="phoneHelp" />
+          <input
+            id="phone"
+            inputmode="tel"
+            placeholder="+91..."
+            class="w-full border rounded p-2"
+            aria-describedby="phoneHelp"
+          />
           <p id="phoneHelp" class="text-sm text-gray-500">Use +91xxxxxxxxxx or enter 10 digits. We’ll format it.</p>
         </div>
 
@@ -59,67 +74,64 @@
         </div>
       </div>
 
-      <!-- Connect Options -->
+      <!-- Connect Options (aligned) -->
       <div>
         <label class="font-semibold">How can our church connect with you?</label>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect" value="Visit/Phone Call">
+            <input type="checkbox" class="connect mt-1" value="Visit/Phone Call" />
             <span>I would like a visit or a phone call</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect" value="Speak with pastor">
+            <input type="checkbox" class="connect mt-1" value="Speak with pastor" />
             <span>I would like to speak with a pastor</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect" value="Receive updates">
+            <input type="checkbox" class="connect mt-1" value="Receive updates" />
             <span>I want to receive updates about church events</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="connect" value="Ministry team help">
+            <input type="checkbox" class="connect mt-1" value="Ministry team help" />
             <span>I would like help connecting with a ministry team</span>
           </label>
-
         </div>
       </div>
 
-      <!-- SPIRITUAL DECISION (Perfect alignment) -->
+      <!-- Spiritual Decision (aligned) -->
       <div>
         <label class="font-semibold">Your Spiritual Decision Today</label>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Began a new relationship with Jesus">
+            <input type="checkbox" class="decision mt-1" value="Began a new relationship with Jesus" />
             <span>I began a new relationship with Jesus today</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Renewed commitment">
+            <input type="checkbox" class="decision mt-1" value="Renewed commitment" />
             <span>I renewed my commitment to Jesus</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Support in journey">
+            <input type="checkbox" class="decision mt-1" value="Support in journey" />
             <span>I want support in my spiritual journey</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Questions about following Jesus">
+            <input type="checkbox" class="decision mt-1" value="Questions about following Jesus" />
             <span>I have questions about following Jesus</span>
           </label>
 
           <label class="flex items-start gap-3">
-            <input type="checkbox" class="decision" value="Other">
+            <input type="checkbox" class="decision mt-1" value="Other" />
             <span>Other</span>
           </label>
-
         </div>
       </div>
 
-      <!-- LOCATIONS moved ABOVE appointment -->
+      <!-- Locations (moved ABOVE appointment) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="font-semibold">Current Location</label>
@@ -131,11 +143,17 @@
         </div>
       </div>
 
-      <!-- Appointment -->
+      <!-- Appointment (Date + Time) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="font-semibold">Appointment Date</label>
-          <input type="date" id="appointment_date" class="w-full border rounded p-2" value="{{ current_date }}" aria-describedby="dateHelp" />
+          <input
+            type="date"
+            id="appointment_date"
+            class="w-full border rounded p-2"
+            value="{{ current_date }}"
+            aria-describedby="dateHelp"
+          />
           <p id="dateHelp" class="text-sm text-gray-500">Select any date that works for you.</p>
         </div>
 
@@ -173,36 +191,38 @@
       });
     });
 
+    // Normalize Indian numbers softly
     function normalizePhone(raw) {
-      const digits = (raw || "").replace(/\D+/g, "");
-      if (digits.length === 10) return "+91" + digits;
-      if (digits.length === 12 && digits.startsWith("91")) return "+" + digits;
-      if (raw.startsWith("+") && digits.length >= 10) return raw;
+      const digits = (raw || '').replace(/\D+/g, '');
+      if (digits.length === 10) return '+91' + digits;
+      if (digits.length === 12 && digits.startsWith('91')) return '+' + digits;
+      if ((raw || '').startsWith('+') && digits.length >= 10) return raw;
       return raw;
     }
 
-    document.getElementById("visitorForm").addEventListener("submit", async (e) => {
+    document.getElementById('visitorForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const connect = Array.from(document.querySelectorAll(".connect:checked")).map(x => x.value);
-      const decisions = Array.from(document.querySelectorAll(".decision:checked")).map(x => x.value);
+      const connect = Array.from(document.querySelectorAll('.connect:checked')).map(x => x.value);
+      const decisions = Array.from(document.querySelectorAll('.decision:checked')).map(x => x.value);
 
-      const firstName = document.getElementById("first_name").value || "";
-      const lastName = document.getElementById("last_name").value || "";
-      const phone = normalizePhone(document.getElementById("phone").value || "");
-      const heard = document.getElementById("heard_about").value || "";
-      const curLoc = document.getElementById("current_location").value || "";
-      const nativePlace = document.getElementById("native_place").value || "";
-      const apptDate = document.getElementById("appointment_date").value || "";
-      const apptTime = selectedSlot || "";
-      const bookingCombined = [apptDate, apptTime].filter(Boolean).join(" ");
+      const firstName = document.getElementById('first_name').value || '';
+      const lastName = document.getElementById('last_name').value || '';
+      const phone = normalizePhone(document.getElementById('phone').value || '');
+      const heard = document.getElementById('heard_about').value || '';
+      const curLoc = document.getElementById('current_location').value || '';
+      const nativePlace = document.getElementById('native_place').value || '';
+      const apptDate = document.getElementById('appointment_date').value || '';
+      const apptTime = selectedSlot || '';
 
+      const bookingCombined = [apptDate, apptTime].filter(Boolean).join(' ');
+
+      // Date column: prefer appt date else today (YYYY-MM-DD)
       const today = new Date();
       const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, "0");
-      const dd = String(today.getDate()).padStart(2, "0");
-      const fallbackDate = `${yyyy}-${mm}-${dd}`;
-      const dateColumn = apptDate || fallbackDate;
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const dateColumn = apptDate || `${yyyy}-${mm}-${dd}`;
 
       const submissionTimestamp = new Date().toISOString();
 
@@ -218,16 +238,16 @@
         "Current Location": curLoc,
         "Native Place": nativePlace,
         "Booking a Pastor Appointment for Counseling Needs": bookingCombined,
-        "Prayer Request": document.getElementById("prayer_request").value || ""
+        "Prayer Request": (document.getElementById('prayer_request').value || '')
       };
 
-      const res = await fetch("/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/submit', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload)
       });
       const out = await res.json();
-      alert(out.message || "Submitted");
+      alert(out.message || 'Submitted');
     });
   </script>
 </body>
